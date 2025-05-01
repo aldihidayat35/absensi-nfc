@@ -1,21 +1,10 @@
 <!DOCTYPE html>
-<!--
-Author: Keenthemes
-Product Name: MetronicProduct Version: 8.2.9
-Purchase: https://1.envato.market/Vm7VRE
-Website: http://www.keenthemes.com
-Contact: support@keenthemes.com
-Follow: www.twitter.com/keenthemes
-Dribbble: www.dribbble.com/keenthemes
-Like: www.facebook.com/keenthemes
-License: For each use you must have a valid license purchased only from above link in order to legally use the theme for your project.
--->
 <html lang="en">
 <!--begin::Head-->
 
 <head>
     <base href="" />
-    <title>Metronic - The World's #1 Selling Tailwind CSS & Bootstrap Admin Template by KeenThemes</title>
+    <title>Absensi NFC | {{ $title ?? 'Dashboard' }}</title>
     <meta charset="utf-8" />
     <meta name="description"
         content="
@@ -38,13 +27,22 @@ License: For each use you must have a valid license purchased only from above li
     <meta property="og:url" content="https://keenthemes.com/metronic" />
     <meta property="og:site_name" content="Metronic by Keenthemes" />
     <link rel="canonical" href="http://preview.keenthemes.com?page=index" />
-    <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
+
+
+    {{-- pavicon --}}
+    <link rel="shortcut icon"
+        href="https://elements-resized.envatousercontent.com/elements-cover-images/e1d552c1-f6b5-4920-9028-cc039a25775d?w=1200&h=630&cf_fit=crop&q=85&format=jpeg&s=7208f7779a351f2f9eb7210cfbc88d4380c2a50daf86921935ddddaedda9a80c" />
+
+
     <!--begin::Fonts(mandatory for all pages)-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" /> <!--end::Fonts-->
     <!--begin::Vendor Stylesheets(used for this page only)-->
-    <link href="{{ asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet"
+        type="text/css" />
+    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
+        type="text/css" />
     <!--end::Vendor Stylesheets-->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 
     <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
@@ -69,39 +67,8 @@ License: For each use you must have a valid license purchased only from above li
     @include('layout/_default')
     @include('partials/_scrolltop')
 
-    {{-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('students.index') }}">Students</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('teachers.index') }}">teachers</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('classrooms.index') }}">Classrooms</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('classrooms.settings') }}">Classroom Settings</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
-    <main class="py-4">
-        <div class="container">
-            @yield('content')
-        </div>
-    </main>
- --}}
+
 
     <!--begin::Modals-->
     @include('partials/modals/_upgrade-plan')
@@ -109,6 +76,7 @@ License: For each use you must have a valid license purchased only from above li
     @include('partials/modals/_new-target')
     @include('partials/modals/_view-users')
     @include('partials/modals/users-search/_main')
+
     <!--end::Modals-->
     <!--begin::Javascript-->
     <script>
@@ -132,6 +100,8 @@ License: For each use you must have a valid license purchased only from above li
     <script src="https://cdn.amcharts.com/lib/5/geodata/usaLow.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
     <!--end::Vendors Javascript-->
 
@@ -144,6 +114,8 @@ License: For each use you must have a valid license purchased only from above li
     <script src="{{ asset('assets/js/custom/utilities/modals/users-search.js') }}"></script>
     <!--end::Custom Javascript-->
     <!--end::Javascript-->
+    @yield('scripts')
+
 </body>
 <!--end::Body-->
 

@@ -1,10 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1 class="mb-5">Students</h1>
+<div id="kt_app_content" class="app-content  flex-column-fluid " >
 
-    <div class="card card-p-0 card-flush">
+    <div class="card card-p-2 card-flush ">
         <div class="card-header align-items-center py-5 gap-2 gap-md-5">
             <div class="card-title">
                 <!--begin::Search-->
@@ -17,6 +16,12 @@
                 <!--end::Search-->
             </div>
             <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+                <!--begin::Create Student Button-->
+                <a href="{{ route('students.create') }}" class="btn btn-primary">
+                    <i class="ki-duotone ki-plus fs-2"></i> Create Student
+                </a>
+                <!--end::Create Student Button-->
+
                 <!--begin::Export dropdown-->
                 <button type="button" class="btn btn-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                     <i class="ki-duotone ki-exit-down fs-2"></i> Export
@@ -39,11 +44,11 @@
                 <!--end::Menu-->
             </div>
         </div>
-        <div class="card-body">
-            <table class="table align-middle border rounded table-row-dashed fs-6 g-5" id="kt_datatable_example">
+        <div class="card-body p-4 ps-12">
+            <table class="table align-middle  rounded table-row-dashed  ps-2 g-2" id="kt_datatable_example">
                 <thead>
-                    <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase">
-                        <th>ID</th>
+                    <tr class="text-start text-gray-500 fw-bold  text-uppercase">
+                        {{-- <th>ID</th> --}}
                         <th>NIS</th>
                         <th>Name</th>
                         <th>NFC UID</th>
@@ -56,7 +61,7 @@
                 <tbody class="fw-semibold text-gray-600">
                     @foreach ($students as $student)
                         <tr>
-                            <td>{{ $student->id }}</td>
+                            {{-- <td>{{ $student->id }}</td> --}}
                             <td>{{ $student->nis }}</td>
                             <td>{{ $student->full_name }}</td>
                             <td>{{ $student->nfc_uid }}</td>

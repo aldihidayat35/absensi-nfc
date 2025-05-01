@@ -1,27 +1,25 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Teacher extends Model
+class Teacher extends Authenticatable
 {
-    use HasFactory;
+    use Notifiable;
 
     protected $fillable = [
-        'nip',
-        'full_name',
-        'gender',
-        'birth_place',
-        'birth_date',
-        'religion',
-        'phone',
-        'email',
-        'address',
-        'status',
-        'photo',
-        'position',
-        'subject',
+        'nip', 'full_name', 'gender', 'birth_place', 'birth_date', 'religion', 
+        'phone', 'email', 'address', 'status', 'photo', 'position', 'subject', 
+        'password', 'level'
     ];
+
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 }

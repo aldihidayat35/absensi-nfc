@@ -4,25 +4,66 @@ namespace App\Http\Controllers;
 
 use App\Models\Teacher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TeacherController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (!Auth::guard('teacher')->check()) {
+                return redirect()->route('teacher.login')->withErrors(['message' => 'Please login first.']);
+            }
+
+            $user = Auth::guard('teacher')->user();
+            $allowedRoutes = ['show'];
+
+            if ($user->level === 'guru' && !in_array($request->route()->getActionMethod(), $allowedRoutes)) {
+                return redirect()->back()->withErrors(['message' => 'Access denied.']);
+
+            }
+
+            if ($user->level !== 'admin' && $user->level !== 'guru') {
+                return redirect()->route('teacher.login')->withErrors(['message' => 'Access denied.']);
+            }
+
+            return $next($request);
+        });
+    }
+
     public function index()
     {
         $teachers = Teacher::all();
-        return view('teachers.index', compact('teachers'));
+        $breadcrumbs = [
+            ['label' => 'Home', 'url' => route('dashboard')],
+            ['label' => 'Teachers', 'url' => '']
+        ];
+        $title = 'Teachers';
+        $description = 'Manage all teachers in the system.';
+
+        return view('teachers.index', compact('teachers', 'breadcrumbs', 'title', 'description'));
     }
 
     public function create()
     {
-        return view('teachers.create');
+        $breadcrumbs = [
+            ['label' => 'Home', 'url' => route('dashboard')],
+            ['label' => 'Teachers', 'url' => route('teachers.index')],
+            ['label' => 'Create', 'url' => '']
+        ];
+        $title = 'Create Teacher';
+        $description = 'Add a new teacher to the system.';
+
+        return view('teachers.create', compact('breadcrumbs', 'title', 'description'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'nip' => 'required|unique:teachers,nip|max:20',
-            'full_name' => 'required|max:100',
+            'nip' => 'required|unique:teachers,nip',
+            'full_name' => 'required',
+            'password' => 'required|min:6',
+            'level' => 'required|in:admin,waka,guru',
             'gender' => 'required|in:Male,Female',
             'birth_place' => 'required|max:50',
             'birth_date' => 'required|date',
@@ -36,23 +77,25 @@ class TeacherController extends Controller
             'subject' => 'required|max:100',
         ]);
 
-        $data = $request->all();
-
-        if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('photos'), $filename);
-            $data['photo'] = 'photos/' . $filename;
+        try {
+            Teacher::create($request->all());
+            return redirect()->route('teachers.index')->with('success', 'Teacher data has been added successfully.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to add teacher: ' . $e->getMessage())->withInput();
         }
-
-        Teacher::create($data);
-
-        return redirect()->route('teachers.index')->with('success', 'Teacher created successfully.');
     }
 
     public function edit(Teacher $teacher)
     {
-        return view('teachers.edit', compact('teacher'));
+        $breadcrumbs = [
+            ['label' => 'Home', 'url' => route('dashboard')],
+            ['label' => 'Teachers', 'url' => route('teachers.index')],
+            ['label' => 'Edit', 'url' => '']
+        ];
+        $title = 'Edit Teacher';
+        $description = 'Edit the details of the teacher.';
+
+        return view('teachers.edit', compact('teacher', 'breadcrumbs', 'title', 'description'));
     }
 
     public function update(Request $request, Teacher $teacher)
